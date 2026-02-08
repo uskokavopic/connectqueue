@@ -7,7 +7,7 @@ Config.JoinDelay = 0
 
 Config.AntiSpam = true
 Config.AntiSpamTimer = 3
-Config.PleaseWait = "Prosím počkaj %d sek..."
+Config.PleaseWait = "Please wait %d sec..."
 
 Config.RequireSteam = false
 Config.PriorityOnly = false
@@ -18,24 +18,24 @@ Config.ConnectTimeOut = 120
 
 -- =========================
 -- DEFAULT POINTS (fallback)
--- schedule to prepíše automaticky
+-- schedule will override automatically
 -- =========================
 Config.MinJoinPoints = 0
-Config.EarnInterval = 30 -- každých X sekund přidá body (pokud není v schedule, nebo je schedule disabled)
-Config.EarnAmount = 100 -- kolik bodů přidá každých X sekund (pokud není v schedule, nebo je schedule disabled)
+Config.EarnInterval = 30 -- adds points every X seconds (if schedule is disabled or not used)
+Config.EarnAmount = 100 -- how many points are added every X seconds
 Config.MaxFreePoints = 3000000
 
 -- =========================
--- SCHEDULE (18:00 PEAK)
--- používa server OS čas (nastav Europe/Bratislava)
+-- SCHEDULE (PEAK HOURS)
+-- uses server OS time (set Europe/Bratislava)
 -- =========================
 Config.QueueSchedule = {
   Enabled = true,
 
   Peak = {
     StartHour = 14,
-    EndHour = 16, -- Čas od kedy do kedy je peak (např. 18 - 23)
-    MinJoinPoints = 7000, -- kolik bodů musí mít hráč pro vstup během peak (může být 0, ale pak není smysl mít schedule)
+    EndHour = 16, -- Peak time range (example: 18 - 23)
+    MinJoinPoints = 7000, -- required points to join during peak hours
     EarnInterval = 30,
     EarnAmount = 100,
     MaxFreePoints = 3000000,
@@ -50,14 +50,14 @@ Config.QueueSchedule = {
 }
 
 -- =========================
--- GRACE BOOST (po páde hry/relog)
--- dá na X sekúnd mega body
+-- GRACE BOOST (after crash / reconnect)
+-- gives temporary high priority points
 -- =========================
 Config.GraceBoost = {
   Enabled = true,
   DurationSeconds = 120,     -- 2 min
-  Points = 2000000,          -- 2 000 000
-  UseIdentifier = "discord", -- odporúčam discord, môže byť "license"
+  Points = 2000000,          -- 2,000,000
+  UseIdentifier = "discord", -- recommended: discord (can be "license")
 }
 
 -- =========================
@@ -76,7 +76,7 @@ Config.ReservedSlots = 0
 Config.ReservedMinPriority = 25
 
 -- =========================
--- QUEUE PRIORITY (poradie vo fronte)
+-- QUEUE PRIORITY (queue order)
 -- =========================
 Config.Priority = {
   -- ["discord:xxxxxxxxxxxxxxxxxx"] = 50,
@@ -89,12 +89,12 @@ Config.RequireDiscord = true
 
 Config.Discord = {
   Enabled = true,
-  GuildId = "", --ID tvého Discord serveru
-  BotToken = "", -- ⚠️ sem vlož token (nikomu neposielaj)
+  GuildId = "", -- Your Discord server ID
+  BotToken = "", -- ⚠️ Put your bot token here (never share it)
   CacheSeconds = 60,
 
   RolePoints = {
-    -- ["ROLE_ID_TIER1"] = 3000, -- Tier1 ... a takhle můžeš přidat další role z Discordu, které budou dávat body (stačí ID role, ne ID uživatele)
+    -- ["ROLE_ID_TIER1"] = 3000,
     -- ["ROLE_ID_TIER2"] = 5000,
     -- ["ROLE_ID_TIER3"] = 7000,
     -- ["ROLE_ID_TIER4"] = 10000,
@@ -102,10 +102,11 @@ Config.Discord = {
 }
 
 -- =========================
--- MANUÁLNE BODY (bez role / bez tebex) – len dopíšeš ľudí do configu
+-- MANUAL POINTS (no role / no Tebex)
+-- add players manually into config
 -- =========================
 Config.ManualPoints = {
-    --["xxxxxxxxxxxxxxxxxx"] = 7800,  -- ID z Hračovho Discordu 
+    --["xxxxxxxxxxxxxxxxxx"] = 7800,  -- Player Discord ID
 }
 
 -- =========================
@@ -114,24 +115,25 @@ Config.ManualPoints = {
 Config.QPoints = {
   Enabled = true,
   DefaultDurationDays = 30,
-  UseIdentifier = "discord",         -- ukladá do DB ako "discord:123..."
+  UseIdentifier = "discord",         -- stored in DB as "discord:123..."
   CommandName = "queue_addpoints",
   AllowInGameAce = true,
   AcePermission = "queue.addpoints"
 }
 
 -- =========================
--- TEXTY
+-- TEXTS
 -- =========================
 Config.Language = {
-  connecting = "Pripájam...",
-  joining = "Vstupuješ na server...",
-  connectingerr = "Chyba pri pripájaní. Skús znova.",
-  idrr = "Nepodarilo sa načítať tvoje identifikátory.",
-  steam = "Zapni Steam a skús znova.",
-  wlonly = "Tento server je len pre whitelist.",
-  discord = "Musíš mať zapnutý Discord (a prepojený s FiveM).",
+  connecting = "Connecting...",
+  joining = "Joining the server...",
+  connectingerr = "Connection error. Please try again.",
+  idrr = "Failed to load your identifiers.",
+  steam = "Please start Steam and try again.",
+  wlonly = "This server is whitelist only.",
+  discord = "You must have Discord running (and linked with FiveM).",
 
   -- pos, size, time, points, required, paid
-  line = "Pozícia: %d/%d | Čas: %s | Earned: %d | Paid: %d | Spolu: %d/%d",
+  line = "Position: %d/%d | Time: %s | Earned: %d | Paid: %d | Total: %d/%d",
 }
+
