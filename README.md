@@ -1,52 +1,58 @@
-CONNECTQUEUE – QUEUE SYSTEM FOR FIVEM
+✨ Features
 
+Deferral-based queue system
+Earned points for all players waiting in queue
+Discord Tier support (subscription roles)
+Tebex QPOINTS support (stacking + expiration system)
+Priority system (VIP / Admin queue priority)
+Grace protection after game crash
+Anti-spam connection protection
+Reserved slot support
+Queue UI showing points, wait time and queue position
+
+📦 Requirements
+
+FiveM Server
+oxmysql
+Discord Bot (optional – required only for Discord tiers)
+
+❗❗❗This script is still under development and may contain unexpected bugs or edge case issues.
+Use at your own risk and make sure to test before using in production.
+Feedback and bug reports are highly appreciated.❗❗❗
+
+CONNECTQUEUE – QUEUE SYSTEM FOR FIVEM
 (BODY + DISCORD TIERS + TEBEX QPOINTS + EARNED BODY)
 
 ==================================================
-
 DESCRIPTION
 
 CONNECTQUEUE is an advanced queue system for a FiveM server
 built on deferrals.
-
 Main goals:
-
 server protection after restart (connect spam)
-
 fair entry using a point system
-
 motivate players to wait in queue
-
 monetization via Discord Tiers and Tebex QPOINTS
-
 Each player in queue has:
-
 PAID points (Tier / Tebex / Manual / Grace)
-
 EARNED points (automatically generated for everyone)
-
 entry is based on TOTAL points
 
 ==================================================
 
 HOW POINTS WORK
-
 POINTS ARE MADE FROM 4 PARTS:
 
 1) EARNED POINTS (FREE – every player)
 
 Every player in queue gets points automatically
-
 Example: +100 points every 30 seconds
-
 Applies to EVERYONE (VIP and non-VIP)
 
 2) DISCORD TIERS (subscription roles)
 
 Tier roles on Discord
-
 Each role has assigned points
-
 Script always uses the HIGHEST tier
 
 Example:
@@ -58,19 +64,14 @@ Tier4 = 10000
 3) TEBEX QPOINTS (no role required)
 
 Points purchased via Tebex
-
 Stored in database
-
 STACKABLE (example: 10000 + 7000 = 17000)
-
 Have expiration (default 30 days)
 
 4) GRACE POINTS
 
 Temporary mega points after crash / reload
-
 Protects players after game crash
-
 Duration is configurable (example: 120 seconds)
 
 TOTAL POINTS:
@@ -84,43 +85,24 @@ TOTAL >= MinJoinPoints
 MAIN FEATURES
 
 Queue when server is full (deferrals)
-
 Shows:
-
 queue position
-
-waiting time
-
+Waiting time
 Earned points
-
 Paid points
-
 Total / Required
-
 Anti connect-spam protection via point system
-
 Earned points for EVERY player
-
 Discord Tier roles (subscription)
-
 Tebex QPOINTS without role (DB, stacking, expiration)
-
 Priority system (VIP/Admin queue order)
-
 Reserved slots (optional)
-
 Grace time after crash
-
 Anti-spam connection delay
-
 Automatic queue count in server name
-
 Clickable buttons in queue:
-
 Tebex
-
 Discord
-
 Shop
 
 ==================================================
@@ -128,11 +110,8 @@ Shop
 REQUIREMENTS
 
 FiveM server
-
 oxmysql (required for Tebex QPOINTS)
-
 Discord bot + Bot Token (if using Discord Tiers)
-
 Player Discord identifier (discord:xxxx)
 if Config.RequireDiscord = true
 
@@ -160,11 +139,8 @@ sql/queue_qpoints.sql
 
 Table:
 queue_qpoints
-
 identifier (PRIMARY KEY, e.g. discord:123456...)
-
 points
-
 expires_at (unix timestamp)
 
 ==================================================
@@ -209,7 +185,6 @@ Config.MaxEarnedPoints = 3000 -- max earned (0 = unlimited)
 2) REQUIRED POINTS (ANTI-SPAM)
 
 Config.MinJoinPoints = 3000
-
 Player must have at least this amount to join.
 
 3) DISCORD TIERS
@@ -258,9 +233,7 @@ Config.GraceBoost.Points = 2000000
 ==================================================
 
 ADMIN / COMMANDS
-
 Add QPOINTS (Tebex / console / admin):
-
 queue_addpoints discord:123456789012345678 7000 30
 
 ==================================================
@@ -268,13 +241,9 @@ queue_addpoints discord:123456789012345678 7000 30
 NOTES
 
 Recommended to enable OneSync
-
 Not recommended to use with hardcap resource
-
 Discord API is cached (prevents spam requests)
-
 Suitable for RP and PVE servers
-
 Earned points are added to EVERY player in queue
 
 ==================================================
