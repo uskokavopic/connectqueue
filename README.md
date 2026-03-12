@@ -1,251 +1,214 @@
-✨ Features
+# 🚀 CONNECTQUEUE
+CONNECTQUEUE je pokročilý, výkonný a plne konfigurovateľný queue systém pre FiveM servery.  
+Je navrhnutý pre **OneSync Infinity**, veľké RP komunity a servery s vysokým náporom hráčov.
 
-Deferral-based queue system
-Earned points for all players waiting in queue
-Discord Tier support (subscription roles)
-Tebex QPOINTS support (stacking + expiration system)
-Priority system (VIP / Admin queue priority)
-Grace protection after game crash
-Anti-spam connection protection
-Reserved slot support
-Queue UI showing points, wait time and queue position
+Systém kombinuje:
+- **Earned body** (zadarmo pre každého)
+- **Paid body** (Discord Tiers, Tebex QPoints, manuálne priority)
+- **Grace body** (po páde hry)
+- **Peak Time požiadavky** (vyšší limit bodov počas špičky)
+- **Anti‑spam ochranu**
+- **Deferrals queue** s detailnými informáciami pre hráča
 
-📦 Requirements
+---
 
-FiveM Server
-oxmysql
-Discord Bot (optional – required only for Discord tiers)
+# 🎯 Čo CONNECTQUEUE rieši
+- chaos po reštarte servera  
+- spamovanie pripojenia  
+- neférové predbiehanie  
+- VIP systém  
+- monetizáciu cez Tebex  
+- stabilitu pri 100–300+ hráčoch  
+- férové čakanie pre všetkých  
 
-❗❗❗This script is still under development and may contain unexpected bugs or edge case issues.
-Use at your own risk and make sure to test before using in production.
-Feedback and bug reports are highly appreciated.❗❗❗
+---
 
-CONNECTQUEUE – QUEUE SYSTEM FOR FIVEM
-(BODY + DISCORD TIERS + TEBEX QPOINTS + EARNED BODY)
+# ⭐ Hlavné funkcie
+- plne funkčný **deferrals queue**
+- **Earned body** – hráč získava body každých X sekúnd
+- **Discord Tier body** – automatické VIP body podľa role
+- **Tebex QPoints** – body zakúpené cez obchod (DB + expirácia)
+- **Grace body** – obrovský boost po páde hry
+- **Peak Time systém** – vyššie požiadavky počas špičky
+- **Anti‑spam cooldown** – blokuje rýchle reconnecty
+- **Priority systém** – manuálne priority podľa identifikátora
+- **Reserved slots** – miesta pre adminov / VIP
+- **DB systém** pre QPoints
+- prehľadné UI texty v queue
+- stabilita pre veľké servery
 
-==================================================
-DESCRIPTION
+---
 
-CONNECTQUEUE is an advanced queue system for a FiveM server
-built on deferrals.
-Main goals:
-server protection after restart (connect spam)
-fair entry using a point system
-motivate players to wait in queue
-monetization via Discord Tiers and Tebex QPOINTS
-Each player in queue has:
-PAID points (Tier / Tebex / Manual / Grace)
-EARNED points (automatically generated for everyone)
-entry is based on TOTAL points
+# 🧮 Body systém (jadro queue)
+Každý hráč má:
 
-==================================================
+### 1️⃣ **EARNED BODY**  
+Získava automaticky každých X sekúnd.  
+Motivuje hráčov čakať férovo.
 
-HOW POINTS WORK
-POINTS ARE MADE FROM 4 PARTS:
+### 2️⃣ **PAID BODY**  
+- Discord Tier body  
+- Tebex QPoints  
+- manuálne priority  
+- Grace body  
 
-1) EARNED POINTS (FREE – every player)
-
-Every player in queue gets points automatically
-Example: +100 points every 30 seconds
-Applies to EVERYONE (VIP and non-VIP)
-
-2) DISCORD TIERS (subscription roles)
-
-Tier roles on Discord
-Each role has assigned points
-Script always uses the HIGHEST tier
-
-Example:
-Tier1 = 3000
-Tier2 = 5000
-Tier3 = 7000
-Tier4 = 10000
-
-3) TEBEX QPOINTS (no role required)
-
-Points purchased via Tebex
-Stored in database
-STACKABLE (example: 10000 + 7000 = 17000)
-Have expiration (default 30 days)
-
-4) GRACE POINTS
-
-Temporary mega points after crash / reload
-Protects players after game crash
-Duration is configurable (example: 120 seconds)
-
-TOTAL POINTS:
+### 3️⃣ **TOTAL BODY**  
+```
 TOTAL = EARNED + PAID
+```
 
-Player can join server when:
-TOTAL >= MinJoinPoints
+Hráč sa dostane na server, keď:
+```
+TOTAL ≥ MinJoinPoints
+```
 
-==================================================
+---
 
-MAIN FEATURES
+# ⏰ Peak Time systém
+CONNECTQUEUE umožňuje nastaviť **časové okno**, počas ktorého musí hráč splniť vyšší limit bodov.
 
-Queue when server is full (deferrals)
-Shows:
-queue position
-Waiting time
-Earned points
-Paid points
-Total / Required
-Anti connect-spam protection via point system
-Earned points for EVERY player
-Discord Tier roles (subscription)
-Tebex QPOINTS without role (DB, stacking, expiration)
-Priority system (VIP/Admin queue order)
-Reserved slots (optional)
-Grace time after crash
-Anti-spam connection delay
-Automatic queue count in server name
-Clickable buttons in queue:
-Tebex
-Discord
-Shop
+Príklad:
+```lua
+Config.PeakTime = {
+    Enabled = true,
+    From = 18,   -- 18:00
+    To = 23,     -- 23:00
+    RequiredPoints = 5000
+}
+```
 
-==================================================
+### Ako to funguje:
+- mimo špičky → stačí MinJoinPoints (napr. 3000)
+- počas špičky → musí mať PeakTime.RequiredPoints (napr. 5000)
 
-REQUIREMENTS
+Toto zabraňuje tomu, aby sa večer dostali na server hráči bez bodov.
 
-FiveM server
-oxmysql (required for Tebex QPOINTS)
-Discord bot + Bot Token (if using Discord Tiers)
-Player Discord identifier (discord:xxxx)
-if Config.RequireDiscord = true
+---
 
-==================================================
+# 🛡️ Anti‑Spam Cooldown
+Systém blokuje hráčov, ktorí sa snažia pripájať príliš rýchlo.
 
-STARTING (server.cfg)
+Výhody:
+- žiadne spamovanie connectu  
+- stabilita po reštarte  
+- férové poradie  
+- menej lagov  
 
+---
+
+# 💎 Discord Tiers (VIP systém)
+Hráč dostane body podľa najvyššej role:
+
+```lua
+Config.Discord.RolePoints = {
+    ["ROLE_ID_TIER1"] = 3000,
+    ["ROLE_ID_TIER2"] = 5000,
+    ["ROLE_ID_TIER3"] = 7000,
+    ["ROLE_ID_TIER4"] = 10000,
+}
+```
+
+---
+
+# 💰 Tebex QPoints (DB + expirácia)
+- body zakúpené cez Tebex  
+- ukladajú sa do databázy  
+- majú expiráciu (default 30 dní)  
+- stackujú sa  
+
+SQL súbor:
+```
+sql/queue_qpoints.sql
+```
+
+---
+
+# 🛟 Grace body (po páde hry)
+Ak hráč spadne alebo crashne, dostane dočasný boost:
+
+```lua
+Config.GraceBoost = {
+    Enabled = true,
+    DurationSeconds = 120,
+    Points = 2000000
+}
+```
+
+Pomáha hráčom dostať sa späť bez čakania.
+
+---
+
+# 🧠 Earned body
+```lua
+Config.EarnInterval = 30
+Config.EarnAmount = 100
+Config.MaxEarnedPoints = 3000
+```
+
+---
+
+# 🥇 Priority systém
+```lua
+Config.Priority = {
+    ["discord:123456789012345678"] = 50
+}
+```
+
+---
+
+# 🎫 Reserved slots
+```lua
+Config.ReservedSlots = 2
+Config.ReservedMinPriority = 50
+```
+
+---
+
+# 📦 Inštalácia
+1. Nakopíruj `connectqueue` do `resources/`
+2. Spusti SQL:
+```
+sql/queue_qpoints.sql
+```
+3. Do `server.cfg` pridaj:
+```cfg
 ensure oxmysql
 ensure connectqueue
-
 set sv_maxclients ""
 set sv_debugqueue "false"
 set sv_displayqueue "true"
+```
 
-allow admins to add QPOINTS
+---
 
-add_ace group.admin queue.addpoints allow
+# 🧰 Admin príkazy
+Pridanie QPoints:
+```
+queue_addpoints discord:123456789012345678 7000 30
+```
 
-==================================================
+---
 
-DATABASE
-
-Run SQL script:
-sql/queue_qpoints.sql
-
-Table:
-queue_qpoints
-identifier (PRIMARY KEY, e.g. discord:123456...)
-points
-expires_at (unix timestamp)
-
-==================================================
-
-RESOURCE STRUCTURE
-
-connectqueue
+# 📁 Štruktúra projektu
+```
+connectqueue/
 ├── fxmanifest.lua
 ├── config.lua
-├── sql
-│ └── queue_qpoints.sql
-├── client
-│ └── client.lua
-└── server
-└── server.lua
+├── sql/
+│   └── queue_qpoints.sql
+├── client/
+│   └── client.lua
+└── server/
+    └── server.lua
+```
 
-==================================================
+---
 
-INSTALLATION
+# 📝 Licencia
+MIT License – môžeš upravovať a používať na svojom serveri.
 
-Copy connectqueue folder into:
-resources/
+---
 
-Run SQL script:
-sql/queue_qpoints.sql
-
-Add to server.cfg:
-ensure oxmysql
-ensure connectqueue
-
-Restart server
-
-==================================================
-
-CONFIGURATION (config.lua)
-1) EARNED POINTS (FREE)
-
-Config.EarnInterval = 30 -- every 30 seconds
-Config.EarnAmount = 100 -- +100 points
-Config.MaxEarnedPoints = 3000 -- max earned (0 = unlimited)
-
-2) REQUIRED POINTS (ANTI-SPAM)
-
-Config.MinJoinPoints = 3000
-Player must have at least this amount to join.
-
-3) DISCORD TIERS
-
-Config.RequireDiscord = true
-Config.Discord.Enabled = true
-
-Config.Discord.GuildId = "DISCORD_SERVER_ID"
-Config.Discord.BotToken = "BOT_TOKEN"
-
-Config.Discord.RolePoints = {
-["ROLE_ID_TIER1"] = 3000,
-["ROLE_ID_TIER2"] = 5000,
-["ROLE_ID_TIER3"] = 7000,
-["ROLE_ID_TIER4"] = 10000,
-}
-
-4) TEBEX QPOINTS
-
-Config.QPoints.Enabled = true
-Config.QPoints.UseIdentifier = "discord"
-Config.QPoints.DefaultDurationDays = 30
-
-Command:
-queue_addpoints discord:123456789012345678 10000 30
-
-5) PRIORITY (queue order)
-
-Config.Priority = {
-["discord:123456789012345678"] = 50
-}
-
-Higher number = higher queue priority.
-
-6) RESERVED SLOTS
-
-Config.ReservedSlots = 2
-Config.ReservedMinPriority = 50
-
-7) GRACE TIME
-
-Config.GraceBoost.Enabled = true
-Config.GraceBoost.DurationSeconds = 120
-Config.GraceBoost.Points = 2000000
-
-==================================================
-
-ADMIN / COMMANDS
-Add QPOINTS (Tebex / console / admin):
-queue_addpoints discord:123456789012345678 7000 30
-
-==================================================
-
-NOTES
-
-Recommended to enable OneSync
-Not recommended to use with hardcap resource
-Discord API is cached (prevents spam requests)
-Suitable for RP and PVE servers
-Earned points are added to EVERY player in queue
-
-==================================================
-
-END README
+# ❤️ Autor
+Vytvoril **Uskokavopic**  
+Optimalizované pre FiveM ekosystém roku 2026.
