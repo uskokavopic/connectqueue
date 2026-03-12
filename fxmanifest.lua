@@ -12,3 +12,6 @@ server_script '@oxmysql/lib/MySQL.lua'
 server_script 'server/server.lua'
 
 client_script 'client/client.lua'
+
+lua54 'yes'
+use_experimental_fxv2_oal 'yes'
